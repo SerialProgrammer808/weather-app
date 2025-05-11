@@ -1,5 +1,5 @@
 //fetch data from API
-async function fetchWeatherData (location) {
+async function fetchWeatherData(location) {
     try {
         const weatherResponse = await fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?key=XVSVRP552T2H3869FECXPXVRK`);
         return weatherResponse;
@@ -10,7 +10,7 @@ async function fetchWeatherData (location) {
 }
 
 //clean data
-async function cleanWeatherData (weatherResponse) {
+async function cleanWeatherData(weatherResponse) {
     try {
         const weatherJson = await weatherResponse.json();
         return weatherJson;
@@ -21,17 +21,11 @@ async function cleanWeatherData (weatherResponse) {
 }
 
 //log data
-function displayData (json) {
-    const display = document.querySelector(".display")
-
-    let details = document.querySelector(".details")
-
-    if (details) {
-        details.remove()
-    }
+function displayData(json) {
+    const display = document.querySelector(".display");
     
-    let newDetails = document.createElement("div")
-    newDetails.classList.add("details")
+    let newDetails = document.createElement("div");
+    newDetails.classList.add("details");
 
     newDetails.innerHTML = 
     `<p>${json.resolvedAddress}</p>
@@ -44,20 +38,47 @@ function displayData (json) {
     <p>Conditions: ${json.currentConditions.conditions}</p>
     <p>Sunrise: ${json.currentConditions.sunrise}</p>
     <p>Sunset: ${json.currentConditions.sunset}</p>
-    `
-    display.appendChild(newDetails)
+    `;
+
+    display.appendChild(newDetails);
 }
 
-async function main () {
+async function main() {
     const form = document.querySelector(".form");
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const location = document.querySelector("#location-input").value
+
+        clear();
+        load();
+
+        const location = document.querySelector("#location-input").value;
         const response = await fetchWeatherData(location);
-        let json = await cleanWeatherData(response);
+        const json = await cleanWeatherData(response);
+        clear();
         displayData(json);
-    })
+    });
 }
 
-main()
+function clear() {
+    let details = document.querySelector(".details");
+    let loadingIcon = document.querySelector(".loading");
+
+    if (details) {
+        details.remove();
+    }
+
+    if (loadingIcon) {
+        loadingIcon.remove();
+    }
+}
+
+function load() {
+    let loadingIcon = document.createElement("img");
+    const display = document.querySelector(".display");
+    loadingIcon.classList.add("loading");
+    loadingIcon.src = "loading.gif";
+    display.appendChild(loadingIcon);
+}
+
+main();
