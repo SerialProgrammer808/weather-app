@@ -5,9 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
-    
+    <div class="header">
+        <p>How's The Weather Over There?</p>
+    </div>
+    <div class="display">
+        <form class="form">
+            <label>Search for a Location</label>
+            <input type="text" id="location-input" required>
+            <button type="submit">Go!</button>
+        </form>
+    </div>
 </body>
 </html>

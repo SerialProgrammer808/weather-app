@@ -21,23 +21,43 @@ async function cleanWeatherData (weatherResponse) {
 }
 
 //log data
-function logData (json) {
-    console.log(json.resolvedAddress);
-    console.log("Time: " + json.currentConditions.datetime);
-    console.log("Temperature: " + json.currentConditions.temp);
-    console.log("Feels like: " + json.currentConditions.feelslike);
-    console.log(json.description);
-    console.log("Humidity: " + json.currentConditions.humidity + "%");
-    console.log("Wind Speed: " + json.currentConditions.windspeed + " km/h");
-    console.log("Conditions: " + json.currentConditions.conditions);
-    console.log("Sunrise: " + json.currentConditions.sunrise);
-    console.log("Sunset: " + json.currentConditions.sunset);
+function displayData (json) {
+    const display = document.querySelector(".display")
+
+    let details = document.querySelector(".details")
+
+    if (details) {
+        details.remove()
+    }
+    
+    let newDetails = document.createElement("div")
+    newDetails.classList.add("details")
+
+    newDetails.innerHTML = 
+    `<p>${json.resolvedAddress}</p>
+    <p>As of: ${json.currentConditions.datetime}</p>
+    <p>Temperature: ${json.currentConditions.temp}</p>
+    <p>Feels like: ${json.currentConditions.feelslike}</p>
+    <p>${json.description}</p>
+    <p>Humidity: ${json.currentConditions.humidity}%</p>
+    <p>Wind Speed: ${json.currentConditions.windspeed} km/h</p>
+    <p>Conditions: ${json.currentConditions.conditions}</p>
+    <p>Sunrise: ${json.currentConditions.sunrise}</p>
+    <p>Sunset: ${json.currentConditions.sunset}</p>
+    `
+    display.appendChild(newDetails)
 }
 
 async function main () {
-    let response = await fetchWeatherData("Bohol");
-    let json = await cleanWeatherData(response)
-    logData(json);
+    const form = document.querySelector(".form");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const location = document.querySelector("#location-input").value
+        const response = await fetchWeatherData(location);
+        let json = await cleanWeatherData(response);
+        displayData(json);
+    })
 }
 
 main()
